@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>ca.uhn.hapi.fhir</groupId>
 		<artifactId>hapi-fhir</artifactId>
-		<version>3.1.0-SNAPSHOT</version>
+		<version>3.2.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -116,10 +116,10 @@
 							<artifactId>spring-jcl</artifactId>
 						</dependency>
 					</ignoredDependencies>
-					<ignoredResources>
-						<ignoredResource>changelog.txt</ignoredResource>
+					<ignoredResourcePatterns>
+						<ignoredResourcePattern>changelog.txt</ignoredResourcePattern>
 						<ignoredResource>javac.bat</ignoredResource>
-					</ignoredResources>
+					</ignoredResourcePatterns>
 				</configuration>
 			</plugin>
 		</plugins>

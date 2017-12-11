@@ -149,6 +149,10 @@ public abstract class BaseHapiFhirResourceDao<T extends IBaseResource> extends B
 			}
 		}
 
+		if (myDaoConfig.getResourceServerIdStrategy() == DaoConfig.IdStrategyEnum.UUID) {
+			theResource.setId(UUID.randomUUID().toString());
+		}
+
 		return doCreate(theResource, theIfNoneExist, thePerformIndexing, new Date(), theRequestDetails);
 	}
 
@@ -256,6 +260,7 @@ public abstract class BaseHapiFhirResourceDao<T extends IBaseResource> extends B
 			ResourceTable entity = myEntityManager.find(ResourceTable.class, pid);
 			deletedResources.add(entity);
 
+			T resourceToDelete = toResource(myResourceType, entity, false);
 			validateOkToDelete(deleteConflicts, entity);
 
 			// Notify interceptors
@@ -268,9 +273,9 @@ public abstract class BaseHapiFhirResourceDao<T extends IBaseResource> extends B
 			// Perform delete
 			Date updateTime = new Date();
 			updateEntity(null, entity, updateTime, updateTime);
+	        resourceToDelete.setId(entity.getIdDt());
 
 			// Notify JPA interceptors
-			T resourceToDelete = toResource(myResourceType, entity, false);
 			if (theRequestDetails != null) {
 				theRequestDetails.getRequestOperationCallback().resourceDeleted(resourceToDelete);
 				ActionRequestDetails requestDetails = new ActionRequestDetails(theRequestDetails, idToDelete.getResourceType(), idToDelete);

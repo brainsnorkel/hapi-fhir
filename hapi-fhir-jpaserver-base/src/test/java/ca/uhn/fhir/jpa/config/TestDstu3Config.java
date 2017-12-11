@@ -1,6 +1,7 @@
 package ca.uhn.fhir.jpa.config;
 
 import ca.uhn.fhir.jpa.dao.DaoConfig;
+import ca.uhn.fhir.jpa.search.LuceneSearchMappingFactory;
 import ca.uhn.fhir.jpa.subscription.email.IEmailSender;
 import ca.uhn.fhir.jpa.subscription.email.JavaMailEmailSender;
 import ca.uhn.fhir.rest.server.interceptor.RequestValidatingInterceptor;
@@ -8,12 +9,19 @@ import ca.uhn.fhir.validation.ResultSeverityEnum;
 import net.ttddyy.dsproxy.support.ProxyDataSourceBuilder;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.hibernate.jpa.HibernatePersistenceProvider;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.env.Environment;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.scheduling.annotation.ScheduledAnnotationBeanPostProcessor;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.EntityManagerFactory;
@@ -80,7 +88,7 @@ public class TestDstu3Config extends BaseJavaConfigDstu3 {
 
 		};
 		retVal.setDriver(new org.apache.derby.jdbc.EmbeddedDriver());
-		retVal.setUrl("jdbc:derby:memory:myUnitTestDB;create=true");
+		retVal.setUrl("jdbc:derby:memory:myUnitTestDBDstu3;create=true");
 		retVal.setMaxWaitMillis(10000);
 		retVal.setUsername("");
 		retVal.setPassword("");
@@ -141,6 +149,7 @@ public class TestDstu3Config extends BaseJavaConfigDstu3 {
 		extraProperties.put("hibernate.show_sql", "false");
 		extraProperties.put("hibernate.hbm2ddl.auto", "update");
 		extraProperties.put("hibernate.dialect", "org.hibernate.dialect.DerbyTenSevenDialect");
+		extraProperties.put("hibernate.search.model_mapping", LuceneSearchMappingFactory.class.getName());
 		extraProperties.put("hibernate.search.default.directory_provider", "ram");
 		extraProperties.put("hibernate.search.lucene_version", "LUCENE_CURRENT");
 		extraProperties.put("hibernate.search.autoregister_listeners", "true");
@@ -167,6 +176,39 @@ public class TestDstu3Config extends BaseJavaConfigDstu3 {
 		JpaTransactionManager retVal = new JpaTransactionManager();
 		retVal.setEntityManagerFactory(entityManagerFactory);
 		return retVal;
+	}
+
+	@Bean
+	public UnregisterScheduledProcessor unregisterScheduledProcessor(Environment theEnv) {
+		return new UnregisterScheduledProcessor(theEnv);
+	}
+
+	/**
+	 * This lets the "@Value" fields reference properties from the properties file
+	 */
+	@Bean
+	public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+		return new PropertySourcesPlaceholderConfigurer();
+	}
+
+
+	public class UnregisterScheduledProcessor implements BeanFactoryPostProcessor {
+
+		private final Environment myEnvironment;
+
+		public UnregisterScheduledProcessor(Environment theEnv) {
+			myEnvironment = theEnv;
+		}
+
+		@Override
+		public void postProcessBeanFactory(final ConfigurableListableBeanFactory beanFactory) throws BeansException {
+			String schedulingDisabled = myEnvironment.getProperty("scheduling_disabled");
+			if ("true".equals(schedulingDisabled)) {
+				for (String beanName : beanFactory.getBeanNamesForType(ScheduledAnnotationBeanPostProcessor.class)) {
+					((DefaultListableBeanFactory) beanFactory).removeBeanDefinition(beanName);
+				}
+			}
+		}
 	}
 
 }
