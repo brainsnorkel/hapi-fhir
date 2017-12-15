@@ -24,7 +24,7 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
-@Embeddable
+// @Embeddable
 @Entity
 @Table(name = "HFJ_HISTORY_TAG", uniqueConstraints= {
 		@UniqueConstraint(name="IDX_RESHISTTAG_TAGID", columnNames= {"RES_VER_PID","TAG_ID"})

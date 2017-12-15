@@ -24,6 +24,7 @@ import javax.persistence.*;
 import org.apache.commons.lang3.builder.*;
 
 @Entity
+// @IdClass(ca.uhn.fhir.jpa.entity.ResourceTag.class)
 @Table(name = "HFJ_RES_TAG", uniqueConstraints= {
 		@UniqueConstraint(name="IDX_RESTAG_TAGID", columnNames= {"RES_ID","TAG_ID"})
 })

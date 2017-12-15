@@ -31,7 +31,7 @@ import org.hibernate.search.annotations.Field;
 import javax.persistence.*;
 
 //@formatter:off
-@Embeddable
+//@Embeddable
 @Entity
 @Table(name = "HFJ_SPIDX_URI", indexes = {
 	@Index(name = "IDX_SP_URI", columnList = "RES_TYPE,SP_NAME,SP_URI"),

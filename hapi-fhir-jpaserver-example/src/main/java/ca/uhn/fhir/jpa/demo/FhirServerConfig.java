@@ -3,6 +3,7 @@ package ca.uhn.fhir.jpa.demo;
 import java.util.Properties;
 
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.sql.DataSource;
 
 import ca.uhn.fhir.jpa.search.LuceneSearchMappingFactory;
@@ -49,8 +50,7 @@ public class FhirServerConfig extends BaseJavaConfigDstu3 {
 	@Bean(destroyMethod = "close")
 	public DataSource dataSource() {
 		BasicDataSource retVal = new BasicDataSource();
-		retVal.setDriver(new org.apache.derby.jdbc.EmbeddedDriver());
-		retVal.setUrl("jdbc:derby:directory:target/jpaserver_derby_files;create=true");
+		retVal.setUrl("hbase:localhost");
 		retVal.setUsername("");
 		retVal.setPassword("");
 		return retVal;
@@ -58,30 +58,21 @@ public class FhirServerConfig extends BaseJavaConfigDstu3 {
 
 	@Bean()
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-		LocalContainerEntityManagerFactoryBean retVal = new LocalContainerEntityManagerFactoryBean();
-		retVal.setPersistenceUnitName("HAPI_PU");
-		retVal.setDataSource(dataSource());
-		retVal.setPackagesToScan("ca.uhn.fhir.jpa.entity");
-		retVal.setPersistenceProvider(new HibernatePersistenceProvider());
-		retVal.setJpaProperties(jpaProperties());
-		return retVal;
+		// LocalContainerEntityManagerFactoryBean retVal = new LocalContainerEntityManagerFactoryBean();
+		LocalContainerEntityManagerFactoryBean emfBean = new LocalContainerEntityManagerFactoryBean() ; // Persistence.createEntityManagerFactory("HAPI_PU");
+
+		/// retVal.setPersistenceUnitName("HAPI_PU");
+		/// retVal.setDataSource(dataSource());
+		//emfBean.setPackagesToScan("ca.uhn.fhir.jpa.entity");
+		/// retVal.setPersistenceProvider(new HibernatePersistenceProvider());
+		/// retVal.setJpaProperties(jpaProperties());
+		return emfBean;
 	}
 
 	private Properties jpaProperties() {
 		Properties extraProperties = new Properties();
-		extraProperties.put("hibernate.dialect", org.hibernate.dialect.DerbyTenSevenDialect.class.getName());
-		extraProperties.put("hibernate.format_sql", "true");
-		extraProperties.put("hibernate.show_sql", "false");
-		extraProperties.put("hibernate.hbm2ddl.auto", "update");
-		extraProperties.put("hibernate.jdbc.batch_size", "20");
-		extraProperties.put("hibernate.cache.use_query_cache", "false");
-		extraProperties.put("hibernate.cache.use_second_level_cache", "false");
-		extraProperties.put("hibernate.cache.use_structured_entries", "false");
-		extraProperties.put("hibernate.cache.use_minimal_puts", "false");
-		extraProperties.put("hibernate.search.model_mapping", LuceneSearchMappingFactory.class.getName());
-		extraProperties.put("hibernate.search.default.directory_provider", "filesystem");
-		extraProperties.put("hibernate.search.default.indexBase", "target/lucenefiles");
-		extraProperties.put("hibernate.search.lucene_version", "LUCENE_CURRENT");
+//		extraProperties.put("datanucleus.schema.autoCreateAll", "true");
+//		extraProperties.put("hibernate.search.lucene_version", "LUCENE_CURRENT");
 //		extraProperties.put("hibernate.search.default.worker.execution", "async");
 		return extraProperties;
 	}

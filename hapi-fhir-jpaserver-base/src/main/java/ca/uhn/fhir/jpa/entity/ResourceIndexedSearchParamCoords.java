@@ -39,7 +39,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.search.annotations.Field;
 
 //@formatter:off
-@Embeddable
+//@Embeddable
 @Entity
 @Table(name = "HFJ_SPIDX_COORDS", indexes = { 
 	@Index(name = "IDX_SP_COORDS", columnList = "RES_TYPE,SP_NAME,SP_LATITUDE,SP_LONGITUDE"), 

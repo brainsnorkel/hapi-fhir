@@ -33,7 +33,7 @@ import javax.persistence.*;
 import javax.persistence.Index;
 
 //@formatter:off
-@Embeddable
+//@Embeddable
 @Entity
 @Table(name = "HFJ_SPIDX_STRING", indexes = {
 	@Index(name = "IDX_SP_STRING", columnList = "RES_TYPE,SP_NAME,SP_VALUE_NORMALIZED"),

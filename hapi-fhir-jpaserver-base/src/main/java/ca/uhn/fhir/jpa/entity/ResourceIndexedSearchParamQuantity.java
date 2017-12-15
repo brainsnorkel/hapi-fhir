@@ -35,7 +35,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 //@formatter:off
-@Embeddable
+//@Embeddable
 @Entity
 @Table(name = "HFJ_SPIDX_QUANTITY", indexes = {
 	@Index(name = "IDX_SP_QUANTITY", columnList = "RES_TYPE,SP_NAME,SP_SYSTEM,SP_UNITS,SP_VALUE"),

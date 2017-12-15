@@ -24,14 +24,13 @@ import ca.uhn.fhir.context.FhirVersionEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.model.primitive.InstantDt;
 import org.hibernate.annotations.OptimisticLock;
-
+//import org.datanucleus.api.jpa.
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Date;
 
 @MappedSuperclass
 public abstract class BaseHasResource {
-
 	@Column(name = "RES_DELETED_AT", nullable = true)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date myDeleted;

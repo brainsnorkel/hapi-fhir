@@ -35,7 +35,7 @@ import org.hl7.fhir.r4.model.InstantType;
 import javax.persistence.*;
 import java.util.Date;
 
-@Embeddable
+//@Embeddable
 @Entity
 @Table(name = "HFJ_SPIDX_DATE", indexes = {
 	@Index(name = "IDX_SP_DATE", columnList = "RES_TYPE,SP_NAME,SP_VALUE_LOW,SP_VALUE_HIGH"),

@@ -29,11 +29,13 @@ import java.io.Serializable;
 import java.util.Date;
 
 @MappedSuperclass
+//@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
 public abstract class BaseResourceIndexedSearchParam implements Serializable {
 
 	static final int MAX_SP_NAME = 100;
 
 	private static final long serialVersionUID = 1L;
+
 
 	// TODO: make this nullable=false and a primitive (written may 2017)
 	@Field()
