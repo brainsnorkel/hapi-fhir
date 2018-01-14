@@ -8,7 +8,9 @@ import ca.uhn.fhir.rest.server.interceptor.RequestValidatingInterceptor;
 import ca.uhn.fhir.validation.ResultSeverityEnum;
 import net.ttddyy.dsproxy.support.ProxyDataSourceBuilder;
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.hibernate.jpa.HibernatePersistenceProvider;
+/* import org.hibernate.jpa.HibernatePersistenceProvider; */
+import org.datanucleus.api.jpa.PersistenceProviderImpl;
+
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -137,7 +139,7 @@ public class TestDstu3Config extends BaseJavaConfigDstu3 {
 		retVal.setPersistenceUnitName("PU_HapiFhirJpaDstu3");
 		retVal.setDataSource(dataSource());
 		retVal.setPackagesToScan("ca.uhn.fhir.jpa.entity");
-		retVal.setPersistenceProvider(new HibernatePersistenceProvider());
+		retVal.setPersistenceProvider(new PersistenceProviderImpl());
 		retVal.setJpaProperties(jpaProperties());
 		return retVal;
 	}

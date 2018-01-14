@@ -56,9 +56,10 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.tuple.Pair;
+import org.datanucleus.store.query.Query;
 import org.hibernate.ScrollMode;
 import org.hibernate.ScrollableResults;
-import org.hibernate.query.Query;
+//import org.hibernate.query.Query;
 import org.hl7.fhir.dstu3.model.BaseResource;
 import org.hl7.fhir.instance.model.api.IAnyResource;
 import org.hl7.fhir.instance.model.api.IBaseResource;
@@ -2147,9 +2148,10 @@ public class SearchBuilder implements ISearchBuilder {
 
 				final TypedQuery<Long> query = createQuery(mySort, maximumResults);
 
-				Query<Long> hibernateQuery = (Query<Long>) query;
-				ScrollableResults scroll = hibernateQuery.scroll(ScrollMode.FORWARD_ONLY);
-				myResultsIterator = new ScrollableResultsIterator(scroll);
+				Query<Long> dnQuery = (Query<Long>) query;
+				//ScrollableResults scroll = dnQuery. // scroll(ScrollMode.FORWARD_ONLY);
+				///myResultsIterator = new Result
+				//myResultsIterator = new ScrollableResultsIterator(scroll);
 
 				// If the query resulted in extra results being requested
 				if (myAlsoIncludePids != null) {

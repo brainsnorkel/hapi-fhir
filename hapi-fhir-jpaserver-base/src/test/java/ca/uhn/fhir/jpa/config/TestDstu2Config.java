@@ -5,7 +5,9 @@ import ca.uhn.fhir.jpa.search.LuceneSearchMappingFactory;
 import ca.uhn.fhir.rest.server.interceptor.RequestValidatingInterceptor;
 import ca.uhn.fhir.validation.ResultSeverityEnum;
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.hibernate.jpa.HibernatePersistenceProvider;
+/*import org.hibernate.jpa.HibernatePersistenceProvider;*/
+import org.datanucleus.api.jpa.PersistenceProviderImpl;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -49,7 +51,7 @@ public class TestDstu2Config extends BaseJavaConfigDstu2 {
 		retVal.setPersistenceUnitName("PU_HapiFhirJpaDstu2");
 		retVal.setDataSource(dataSource());
 		retVal.setPackagesToScan("ca.uhn.fhir.jpa.entity");
-		retVal.setPersistenceProvider(new HibernatePersistenceProvider());
+		retVal.setPersistenceProvider(new PersistenceProviderImpl());
 		retVal.setJpaProperties(jpaProperties());
 		return retVal;
 	}

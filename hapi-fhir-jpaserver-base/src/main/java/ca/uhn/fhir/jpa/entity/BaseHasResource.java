@@ -23,7 +23,7 @@ package ca.uhn.fhir.jpa.entity;
 import ca.uhn.fhir.context.FhirVersionEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.model.primitive.InstantDt;
-import org.hibernate.annotations.OptimisticLock;
+//import org.hibernate.annotations.OptimisticLock;
 //import org.datanucleus.api.jpa.
 import javax.persistence.*;
 import java.util.Collection;
@@ -37,36 +37,36 @@ public abstract class BaseHasResource {
 
 	@Column(name = "RES_ENCODING", nullable = false, length = 5)
 	@Enumerated(EnumType.STRING)
-	@OptimisticLock(excluded = true)
+	//@OptimisticLock(excluded = true)
 	private ResourceEncodingEnum myEncoding;
 
 	@Column(name = "RES_VERSION", nullable = true, length = 7)
 	@Enumerated(EnumType.STRING)
-	@OptimisticLock(excluded = true)
+	//@OptimisticLock(excluded = true)
 	private FhirVersionEnum myFhirVersion;
 
 	@OneToOne(optional = true, fetch = FetchType.EAGER, cascade = {}, orphanRemoval = false)
 	@JoinColumn(name = "FORCED_ID_PID")
-	@OptimisticLock(excluded = true)
+	//@OptimisticLock(excluded = true)
 	private ForcedId myForcedId;
 
 	@Column(name = "HAS_TAGS", nullable = false)
-	@OptimisticLock(excluded = true)
+	//@OptimisticLock(excluded = true)
 	private boolean myHasTags;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "RES_PUBLISHED", nullable = false)
-	@OptimisticLock(excluded = true)
+	//@OptimisticLock(excluded = true)
 	private Date myPublished;
 
 	@Column(name = "RES_TEXT", length = Integer.MAX_VALUE - 1, nullable = false)
 	@Lob()
-	@OptimisticLock(excluded = true)
+	//@OptimisticLock(excluded = true)
 	private byte[] myResource;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "RES_UPDATED", nullable = false)
-	@OptimisticLock(excluded = true)
+	//@OptimisticLock(excluded = true)
 	private Date myUpdated;
 
 	public abstract BaseTag addTag(TagDefinition theDef);

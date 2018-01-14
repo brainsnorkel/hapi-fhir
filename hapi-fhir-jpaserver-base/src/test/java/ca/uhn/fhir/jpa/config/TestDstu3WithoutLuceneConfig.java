@@ -2,7 +2,8 @@ package ca.uhn.fhir.jpa.config;
 
 import java.util.Properties;
 
-import org.hibernate.jpa.HibernatePersistenceProvider;
+/* import org.hibernate.jpa.HibernatePersistenceProvider;*/
+import org.datanucleus.api.jpa.PersistenceProviderImpl;
 import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,7 +32,7 @@ public class TestDstu3WithoutLuceneConfig extends TestDstu3Config {
 		retVal.setPersistenceUnitName("PU_HapiFhirJpaDstu3");
 		retVal.setDataSource(dataSource());
 		retVal.setPackagesToScan("ca.uhn.fhir.jpa.entity");
-		retVal.setPersistenceProvider(new HibernatePersistenceProvider());
+		retVal.setPersistenceProvider(new PersistenceProviderImpl());
 		retVal.setJpaProperties(jpaProperties());
 		return retVal;
 	}

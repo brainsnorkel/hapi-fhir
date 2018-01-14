@@ -26,8 +26,10 @@ import ca.uhn.fhir.rest.api.Constants;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.hibernate.annotations.OptimisticLock;
-import org.hibernate.search.annotations.*;
+/*import org.hibernate.annotations.OptimisticLock;*/
+/* import org.hibernate.search.annotations.*; */
+import javax.persistence.*;
+import org.datanucleus.api.jpa.annotations.*;
 
 import javax.persistence.*;
 import javax.persistence.Index;
@@ -40,7 +42,7 @@ import java.util.Set;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
 //@formatter:off
-@Indexed(interceptor = IndexNonDeletedInterceptor.class)
+//@Indexed(interceptor = IndexNonDeletedInterceptor.class)
 @Entity
 @Table(name = "HFJ_RESOURCE", uniqueConstraints = {}, indexes = {
 	@Index(name = "IDX_RES_DATE", columnList = "RES_UPDATED"),
@@ -60,21 +62,21 @@ public class ResourceTable extends BaseHasResource implements Serializable {
 	 * Holds the narrative text only - Used for Fulltext searching but not directly stored in the DB
 	 */
 	@Transient()
-	@Fields({
+	/* @Fields({
 		@Field(name = "myContentText", index = org.hibernate.search.annotations.Index.YES, store = Store.YES, analyze = Analyze.YES, analyzer = @Analyzer(definition = "standardAnalyzer")),
 		@Field(name = "myContentTextEdgeNGram", index = org.hibernate.search.annotations.Index.YES, store = Store.NO, analyze = Analyze.YES, analyzer = @Analyzer(definition = "autocompleteEdgeAnalyzer")),
 		@Field(name = "myContentTextNGram", index = org.hibernate.search.annotations.Index.YES, store = Store.NO, analyze = Analyze.YES, analyzer = @Analyzer(definition = "autocompleteNGramAnalyzer")),
 		@Field(name = "myContentTextPhonetic", index = org.hibernate.search.annotations.Index.YES, store = Store.NO, analyze = Analyze.YES, analyzer = @Analyzer(definition = "autocompletePhoneticAnalyzer"))
-	})
-	@OptimisticLock(excluded = true)
+	}) */
+	//@OptimisticLock(excluded = true)
 	private String myContentText;
 
 	@Column(name = "HASH_SHA256", length = 64, nullable = true)
-	@OptimisticLock(excluded = true)
+	//@OptimisticLock(excluded = true)
 	private String myHashSha256;
 
 	@Column(name = "SP_HAS_LINKS")
-	@OptimisticLock(excluded = true)
+	//@OptimisticLock(excluded = true)
 	private boolean myHasLinks;
 
 	@Id
@@ -84,115 +86,115 @@ public class ResourceTable extends BaseHasResource implements Serializable {
 	private Long myId;
 
 	@OneToMany(mappedBy = "myTargetResource", cascade = {}, fetch = FetchType.LAZY, orphanRemoval = false)
-	@OptimisticLock(excluded = true)
+	//@OptimisticLock(excluded = true)
 	private Collection<ResourceLink> myIncomingResourceLinks;
 
 	@Column(name = "SP_INDEX_STATUS", nullable = true)
-	@OptimisticLock(excluded = true)
+//@OptimisticLock(excluded = true)
 	private Long myIndexStatus;
 
 	@Column(name = "RES_LANGUAGE", length = MAX_LANGUAGE_LENGTH, nullable = true)
-	@OptimisticLock(excluded = true)
+//@OptimisticLock(excluded = true)
 	private String myLanguage;
 
 	/**
 	 * Holds the narrative text only - Used for Fulltext searching but not directly stored in the DB
 	 */
 	@Transient()
-	@Fields({
+	/* @Fields({
 		@Field(name = "myNarrativeText", index = org.hibernate.search.annotations.Index.YES, store = Store.YES, analyze = Analyze.YES, analyzer = @Analyzer(definition = "standardAnalyzer")),
 		@Field(name = "myNarrativeTextEdgeNGram", index = org.hibernate.search.annotations.Index.YES, store = Store.NO, analyze = Analyze.YES, analyzer = @Analyzer(definition = "autocompleteEdgeAnalyzer")),
 		@Field(name = "myNarrativeTextNGram", index = org.hibernate.search.annotations.Index.YES, store = Store.NO, analyze = Analyze.YES, analyzer = @Analyzer(definition = "autocompleteNGramAnalyzer")),
 		@Field(name = "myNarrativeTextPhonetic", index = org.hibernate.search.annotations.Index.YES, store = Store.NO, analyze = Analyze.YES, analyzer = @Analyzer(definition = "autocompletePhoneticAnalyzer"))
-	})
-	@OptimisticLock(excluded = true)
+	})*/
+//@OptimisticLock(excluded = true)
 	private String myNarrativeText;
 
 	@OneToMany(mappedBy = "myResource", cascade = {}, fetch = FetchType.LAZY, orphanRemoval = false)
-	@OptimisticLock(excluded = true)
+//@OptimisticLock(excluded = true)
 	private Collection<ResourceIndexedSearchParamCoords> myParamsCoords;
 
 	@Column(name = "SP_COORDS_PRESENT")
-	@OptimisticLock(excluded = true)
+//@OptimisticLock(excluded = true)
 	private boolean myParamsCoordsPopulated;
 
 	@OneToMany(mappedBy = "myResource", cascade = {}, fetch = FetchType.LAZY, orphanRemoval = false)
-	@OptimisticLock(excluded = true)
+//@OptimisticLock(excluded = true)
 	private Collection<ResourceIndexedSearchParamDate> myParamsDate;
 
 	@Column(name = "SP_DATE_PRESENT")
-	@OptimisticLock(excluded = true)
+//@OptimisticLock(excluded = true)
 	private boolean myParamsDatePopulated;
 
-	@OptimisticLock(excluded = true)
+//@OptimisticLock(excluded = true)
 	@OneToMany(mappedBy = "myResource", cascade = {}, fetch = FetchType.LAZY, orphanRemoval = false)
 	private Collection<ResourceIndexedSearchParamNumber> myParamsNumber;
 
 	@Column(name = "SP_NUMBER_PRESENT")
-	@OptimisticLock(excluded = true)
+//@OptimisticLock(excluded = true)
 	private boolean myParamsNumberPopulated;
 
 	@OneToMany(mappedBy = "myResource", cascade = {}, fetch = FetchType.LAZY, orphanRemoval = false)
-	@OptimisticLock(excluded = true)
+//@OptimisticLock(excluded = true)
 	private Collection<ResourceIndexedSearchParamQuantity> myParamsQuantity;
 
 	@Column(name = "SP_QUANTITY_PRESENT")
-	@OptimisticLock(excluded = true)
+//@OptimisticLock(excluded = true)
 	private boolean myParamsQuantityPopulated;
 
 	@OneToMany(mappedBy = "myResource", cascade = {}, fetch = FetchType.LAZY, orphanRemoval = false)
-	@OptimisticLock(excluded = true)
+//@OptimisticLock(excluded = true)
 	private Collection<ResourceIndexedSearchParamString> myParamsString;
 
 	@Column(name = "SP_STRING_PRESENT")
-	@OptimisticLock(excluded = true)
+//@OptimisticLock(excluded = true)
 	private boolean myParamsStringPopulated;
 
 	@OneToMany(mappedBy = "myResource", cascade = {}, fetch = FetchType.LAZY, orphanRemoval = false)
-	@OptimisticLock(excluded = true)
+//@OptimisticLock(excluded = true)
 	private Collection<ResourceIndexedSearchParamToken> myParamsToken;
 
 	@Column(name = "SP_TOKEN_PRESENT")
-	@OptimisticLock(excluded = true)
+//@OptimisticLock(excluded = true)
 	private boolean myParamsTokenPopulated;
 
 	@OneToMany(mappedBy = "myResource", cascade = {}, fetch = FetchType.LAZY, orphanRemoval = false)
-	@OptimisticLock(excluded = true)
+//@OptimisticLock(excluded = true)
 	private Collection<ResourceIndexedSearchParamUri> myParamsUri;
 
 	@Column(name = "SP_URI_PRESENT")
-	@OptimisticLock(excluded = true)
+//@OptimisticLock(excluded = true)
 	private boolean myParamsUriPopulated;
 
 	@Column(name = "RES_PROFILE", length = MAX_PROFILE_LENGTH, nullable = true)
-	@OptimisticLock(excluded = true)
+//@OptimisticLock(excluded = true)
 	private String myProfile;
 
 	// Added in 3.0.0 - Should make this a primitive Boolean at some point
-	@OptimisticLock(excluded = true)
+//@OptimisticLock(excluded = true)
 	@Column(name = "SP_CMPSTR_UNIQ_PRESENT")
 	private Boolean myParamsCompositeStringUniquePresent = false;
 
 	@OneToMany(mappedBy = "myResource", cascade = {}, fetch = FetchType.LAZY, orphanRemoval = false)
-	@OptimisticLock(excluded = true)
+//@OptimisticLock(excluded = true)
 	private Collection<ResourceIndexedCompositeStringUnique> myParamsCompositeStringUnique;
 
 	@OneToMany(mappedBy = "mySourceResource", cascade = {}, fetch = FetchType.LAZY, orphanRemoval = false)
-	@IndexedEmbedded()
-	@OptimisticLock(excluded = true)
+	//@IndexedEmbedded()
+//@OptimisticLock(excluded = true)
 	private Collection<ResourceLink> myResourceLinks;
 
 	@Column(name = "RES_TYPE", length = RESTYPE_LEN)
-	@Field
-	@OptimisticLock(excluded = true)
+	//@Field
+//@OptimisticLock(excluded = true)
 	private String myResourceType;
 
 	@OneToMany(mappedBy = "myResource", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-	@OptimisticLock(excluded = true)
+//@OptimisticLock(excluded = true)
 	private Collection<SearchParamPresent> mySearchParamPresents;
 
 	@OneToMany(mappedBy = "myResource", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-	@OptimisticLock(excluded = true)
+//@OptimisticLock(excluded = true)
 	private Set<ResourceTag> myTags;
 
 	@Transient
